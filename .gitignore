@@ -1,0 +1,16 @@
+# Dependencies - never upload these
+node_modules/
+
+# Environment variables - contains secret API keys
+.env
+.env.local
+
+# Build output
+dist/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
