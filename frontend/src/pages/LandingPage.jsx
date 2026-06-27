@@ -54,6 +54,57 @@ function LandingPage() {
         </div>
 
       </div>
+
+      {/* Features Section */}
+      <div className="px-6 py-20 bg-gray-800">
+
+        {/* Section Heading */}
+        <div className="text-center mb-14">
+          <h2 className="text-3xl font-bold mb-4">
+            Everything You Need to
+            <span className="text-purple-400"> Crack Interviews</span>
+          </h2>
+          <p className="text-gray-400 text-lg max-w-xl mx-auto">
+            MockMate gives you the complete interview preparation toolkit
+          </p>
+        </div>
+
+        {/* 3 Cards */}
+        <div className="flex flex-col md:flex-row gap-6 max-w-5xl mx-auto">
+
+          {/* Card 1 */}
+          <div className="bg-gray-900 rounded-xl p-8 flex-1 border border-gray-700 hover:border-purple-500 transition">
+            <div className="text-4xl mb-4">🎯</div>
+            <h3 className="text-xl font-bold mb-3">Role Based Interviews</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Practice interviews specifically designed for SDE, Frontend Developer,
+              and Backend Developer roles. Questions tailored to what companies actually ask.
+            </p>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-gray-900 rounded-xl p-8 flex-1 border border-gray-700 hover:border-purple-500 transition">
+            <div className="text-4xl mb-4">📚</div>
+            <h3 className="text-xl font-bold mb-3">Topic Wise Practice</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Master DSA, Operating Systems, DBMS, Computer Networks, OOP,
+              SQL, System Design and Web Development — one topic at a time.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-gray-900 rounded-xl p-8 flex-1 border border-gray-700 hover:border-purple-500 transition">
+            <div className="text-4xl mb-4">🤖</div>
+            <h3 className="text-xl font-bold mb-3">AI Feedback & Scoring</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Get instant detailed feedback on every answer. AI scores your response,
+              identifies gaps and suggests improvements to help you grow faster.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   )
 }
