@@ -105,6 +105,102 @@ function LandingPage() {
         </div>
       </div>
 
+    {/* How It Works Section */}
+      <div className="px-6 py-20 bg-gray-900">
+
+        {/* Section Heading */}
+        <div className="text-center mb-14">
+          <h2 className="text-3xl font-bold mb-4">
+            How
+            <span className="text-purple-400"> MockMate </span>
+            Works
+          </h2>
+          <p className="text-gray-400 text-lg">
+            Start practicing in 3 simple steps
+          </p>
+        </div>
+
+        {/* 3 Steps */}
+        <div className="flex flex-col md:flex-row gap-8 max-w-4xl mx-auto">
+
+          {/* Step 1 */}
+          <div className="flex flex-col items-center text-center flex-1">
+            <div className="bg-purple-600 text-white text-xl font-bold w-12 h-12 rounded-full flex items-center justify-center mb-4">
+              1
+            </div>
+            <h3 className="text-xl font-bold mb-3">Choose Your Mode</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Select role-based interview for job preparation or
+              topic-wise practice to master specific CS subjects.
+            </p>
+          </div>
+
+          {/* Arrow */}
+          <div className="hidden md:flex items-center text-purple-400 text-3xl">
+            →
+          </div>
+
+          {/* Step 2 */}
+          <div className="flex flex-col items-center text-center flex-1">
+            <div className="bg-purple-600 text-white text-xl font-bold w-12 h-12 rounded-full flex items-center justify-center mb-4">
+              2
+            </div>
+            <h3 className="text-xl font-bold mb-3">Answer Questions</h3>
+            <p className="text-gray-400 leading-relaxed">
+              AI asks you interview questions one by one.
+              Type your answers just like a real interview setting.
+            </p>
+          </div>
+
+          {/* Arrow */}
+          <div className="hidden md:flex items-center text-purple-400 text-3xl">
+            →
+          </div>
+
+          {/* Step 3 */}
+          <div className="flex flex-col items-center text-center flex-1">
+            <div className="bg-purple-600 text-white text-xl font-bold w-12 h-12 rounded-full flex items-center justify-center mb-4">
+              3
+            </div>
+            <h3 className="text-xl font-bold mb-3">Get AI Feedback</h3>
+            <p className="text-gray-400 leading-relaxed">
+              Receive instant detailed feedback, score and
+              improvement tips for every answer you give.
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-gray-800 border-t border-gray-700 px-6 py-10">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+
+          {/* Logo */}
+          <div className="text-2xl font-bold">
+            Mock<span className="text-purple-400">Mate</span>
+          </div>
+
+          {/* Tagline */}
+          <p className="text-gray-400 text-sm text-center">
+            AI powered mock interviews for CS students
+          </p>
+
+          {/* Links */}
+          <div className="flex gap-6 text-gray-400 text-sm">
+            <span className="hover:text-purple-400 cursor-pointer transition">About</span>
+            <span className="hover:text-purple-400 cursor-pointer transition">GitHub</span>
+            <span className="hover:text-purple-400 cursor-pointer transition">Contact</span>
+          </div>
+
+        </div>
+
+        {/* Copyright */}
+        <div className="text-center text-gray-600 text-sm mt-6">
+          © 2025 MockMate. Built for CS students by CS students.
+        </div>
+      </div>
+
     </div>
   )
 }
