@@ -48,6 +48,7 @@ function InterviewPage() {
   const [sessionEnded, setSessionEnded] = useState(false)
   const [totalScore, setTotalScore] = useState(0)
   const [scoreCount, setScoreCount] = useState(0)
+  const [currentQuestion, setCurrentQuestion] = useState('')
 
   const totalQuestions = 5
   const chatEndRef = useRef(null)
@@ -95,8 +96,9 @@ function InterviewPage() {
     setIsLoading(true)
     try {
       const historyText = history
-        .map(h => `${h.role === 'ai' ? 'Interviewer' : 'Student'}: ${h.content}`)
-        .join('\n')
+.filter(h => h.role === "ai")
+.map(h => h.content)
+.join("\n")
 
       const prompt = `You are an expert technical interviewer conducting a ${subjectName} interview for a final year CS student applying at ${companies}.
 
@@ -119,7 +121,12 @@ Rules:
         max_tokens: 150,
       })
 
-      const question = response.choices[0].message.content.trim()
+      const question = response.choices[0].message.content
+      .replace(/^Question[:\-]*/i, "")
+      .trim()
+
+      setCurrentQuestion(question)
+
       addMessage('ai', question)
       speakText(question)
       setQuestionCount(qNumber)
@@ -137,19 +144,32 @@ Rules:
   async function evaluateAnswer(answer, currentMessages) {
     setIsLoading(true)
     try {
-      const lastQuestion = [...currentMessages]
-        .reverse()
-        .find(m => m.role === 'ai')?.content || ''
-
-      const prompt = `You are evaluating a campus placement interview answer.
+      const prompt = `
+You are a senior technical interviewer at ${companies}.
 
 Subject: ${subjectName}
-Question: ${lastQuestion}
-Student Answer: ${answer}
 
-Respond in EXACTLY this format:
-SCORE: [number 1-10]/10
-FEEDBACK: [2-3 sentences. Say what was good and what was missing. Be encouraging but honest. Sound like a real interviewer.]`
+Current Question:
+${currentQuestion}
+
+Candidate Answer:
+${answer}
+
+Evaluate the answer honestly.
+
+If the answer is incomplete, ask a follow-up question.
+If the answer is good, ask a new interview question from another important topic.
+
+Respond ONLY in this format:
+
+SCORE: X/10
+
+FEEDBACK:
+(2-3 sentences)
+
+NEXT QUESTION:
+(Ask exactly ONE question)
+`
 
       const response = await groq.chat.completions.create({
         model: 'llama3-8b-8192',
@@ -159,8 +179,8 @@ FEEDBACK: [2-3 sentences. Say what was good and what was missing. Be encouraging
       })
 
       const result = response.choices[0].message.content.trim()
-      const scoreMatch = result.match(/SCORE:\s*(\d+)\/10/)
-      const feedbackMatch = result.match(/FEEDBACK:\s*(.+)/s)
+      const scoreMatch = result.match(/(\d+)\/10/i)
+      const feedbackMatch = result.match(/FEEDBACK[:\s]*([\s\S]*)/i)
 
       const score = scoreMatch ? parseInt(scoreMatch[1]) : 6
       const feedbackText = feedbackMatch
