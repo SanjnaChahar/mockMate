@@ -100,22 +100,36 @@ function InterviewPage() {
 .map(h => h.content)
 .join("\n")
 
-      const prompt = `You are an expert technical interviewer conducting a ${subjectName} interview for a final year CS student applying at ${companies}.
+      const prompt = `You are a friendly technical interviewer conducting a campus placement interview for a final year Computer Science student in India.
 
-This is question ${qNumber} of ${totalQuestions}.
+Subject: ${subjectName}
+Companies hiring: ${companies}
+Question number: ${qNumber} of ${totalQuestions}
 
 Previous conversation:
 ${historyText}
 
-Generate ONE fresh interview question on ${subjectName}.
-Rules:
-- Ask only ONE question
-- Make it different from any previous questions shown above
-- Suitable for campus placement level
-- No numbering or preamble — just ask the question directly`
+Generate ONE interview question following these strict rules:
+- Difficulty: EASY to MEDIUM only (not advanced or research level)
+- Type: Conceptual or definitional questions (not complex implementation)
+- Style: Like "What is...", "Explain...", "What is the difference between...", "Give an example of..."
+- Target: A student who has studied ${subjectName} in their B.Tech syllabus
+- Length: One clear, simple sentence
+- No numbering, no preamble — just the question directly
+
+Examples of GOOD questions:
+- What is the difference between a stack and a queue?
+- Explain what deadlock is with an example.
+- What is normalization in DBMS?
+- What is the difference between TCP and UDP?
+
+Examples of BAD questions (too hard — avoid these):
+- Design a distributed system that handles...
+- Implement a lock-free concurrent data structure...
+- How would you optimize a B+ tree for...`
 
       const response = await groq.chat.completions.create({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.9,
         max_tokens: 150,
@@ -144,35 +158,28 @@ Rules:
   async function evaluateAnswer(answer, currentMessages) {
     setIsLoading(true)
     try {
-      const prompt = `
-You are a senior technical interviewer at ${companies}.
+      const lastQuestion = [...currentMessages]
+        .reverse()
+        .find(m => m.role === 'ai')?.content || ''
+
+
+      const prompt = `You are evaluating a campus placement interview answer for a final year CS student in India.
 
 Subject: ${subjectName}
+Question asked: ${lastQuestion}
+Student's answer: ${answer}
 
-Current Question:
-${currentQuestion}
+Respond in EXACTLY this format:
+SCORE: [number 1-10]/10
+FEEDBACK: [3-4 sentences. Mention specifically what was correct in their answer, what important points were missing, and one tip to improve. Be encouraging but honest like a real interviewer.]
 
-Candidate Answer:
-${answer}
-
-Evaluate the answer honestly.
-
-If the answer is incomplete, ask a follow-up question.
-If the answer is good, ask a new interview question from another important topic.
-
-Respond ONLY in this format:
-
-SCORE: X/10
-
-FEEDBACK:
-(2-3 sentences)
-
-NEXT QUESTION:
-(Ask exactly ONE question)
-`
+STRICT RULES:
+- Do NOT include any new question in your response
+- Do NOT write "NEXT QUESTION" anywhere
+- Only provide SCORE and FEEDBACK nothing else`
 
       const response = await groq.chat.completions.create({
-        model: 'llama3-8b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.7,
         max_tokens: 200,
