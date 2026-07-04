@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function LandingPage() {
   return (
     <div className="bg-gray-900 min-h-screen text-white">
@@ -25,12 +27,12 @@ function LandingPage() {
 
         {/* Buttons */}
         <div className="flex gap-4 mb-16">
-          <button className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition">
+          <Link to="/signup" className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg text-lg font-semibold transition">
             Start Practicing Free
-          </button>
-          <button className="border border-gray-600 hover:border-purple-400 text-gray-300 hover:text-purple-400 px-8 py-3 rounded-lg text-lg transition">
+          </Link>
+          <a href="#how-it-works" className="border border-gray-600 hover:border-purple-400 text-gray-300 hover:text-purple-400 px-8 py-3 rounded-lg text-lg transition">
             See How It Works
-          </button>
+          </a>
         </div>
 
         {/* Stats */}
@@ -106,7 +108,7 @@ function LandingPage() {
       </div>
 
     {/* How It Works Section */}
-      <div className="px-6 py-20 bg-gray-900">
+      <div id= "how-it-works" className="px-6 py-20 bg-gray-900">
 
         {/* Section Heading */}
         <div className="text-center mb-14">

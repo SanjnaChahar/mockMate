@@ -49,7 +49,7 @@ function DashboardPage() {
 
             {/* Role Based */}
             <Link
-              to="/mode-select"
+              to="/role-select"
               className="flex-1 bg-purple-600 hover:bg-purple-700 text-white rounded-xl p-6 text-center transition"
             >
               <div className="text-3xl mb-3">🎯</div>

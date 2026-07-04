@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage'
 import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import SubjectSelectPage from './pages/SubjectSelectPage'
+import RoleSelectPage from './pages/RoleSelectPage'
 import InterviewPage from './pages/InterviewPage'
 import ResultsPage from './pages/ResultsPage'
 import Navbar from './components/Navbar'
@@ -18,6 +19,7 @@ function App() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/subject-select" element={<SubjectSelectPage />} />
+        <Route path="/role-select" element={<RoleSelectPage />} />
         <Route path="/interview/topic/:subjectId" element={<InterviewPage />} />
         <Route path="/results" element={<ResultsPage />} />
       </Routes>

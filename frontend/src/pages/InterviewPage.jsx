@@ -8,6 +8,7 @@ const groq = new Groq({
 })
 
 const subjectNames = {
+  //CS Subjects
   dsa: 'Data Structures & Algorithms',
   os: 'Operating Systems',
   dbms: 'Database Management Systems',
@@ -16,9 +17,14 @@ const subjectNames = {
   sql: 'SQL & Databases',
   'system-design': 'System Design',
   webdev: 'Web Development',
+  //Roles
+  sde: 'Software Development Engineer (SDE)',
+  frontend: 'Frontend Developer',
+  backend: 'Backend Developer',
 }
 
 const companyContext = {
+  //CS Subjects
   dsa: 'Amazon, Google, Microsoft, Flipkart',
   os: 'Microsoft, Adobe, Atlassian, Oracle',
   dbms: 'Oracle, IBM, TCS, Infosys, Wipro',
@@ -27,6 +33,17 @@ const companyContext = {
   sql: 'TCS, Infosys, Wipro, Capgemini',
   'system-design': 'Google, Amazon, Flipkart, Uber',
   webdev: 'Razorpay, Swiggy, Zomato, startups',
+  // Roles
+  sde: 'Amazon, Google, Microsoft, Flipkart, Uber',
+  frontend: 'Razorpay, Swiggy, Zomato, Paytm, startups',
+  backend: 'Uber, PayTM, PhonePe, Atlassian, Freshworks',
+}
+
+const topicContext = {
+  // What topics to focus on per role
+  sde: 'Data Structures, Algorithms, Problem Solving, Basic System Design, OOP concepts',
+  frontend: 'HTML, CSS, JavaScript, React, DOM manipulation, Browser APIs, CSS Flexbox/Grid, ES6+',
+  backend: 'Node.js, REST APIs, Databases, SQL, Authentication, System Design basics, Caching',
 }
 
 function InterviewPage() {
@@ -100,33 +117,40 @@ function InterviewPage() {
 .map(h => h.content)
 .join("\n")
 
-      const prompt = `You are a friendly technical interviewer conducting a campus placement interview for a final year Computer Science student in India.
+      const isRole = ['sde', 'frontend', 'backend'].includes(subjectId)
 
-Subject: ${subjectName}
-Companies hiring: ${companies}
+const prompt = `You are a friendly technical interviewer conducting a campus placement interview for a final year Computer Science student in India.
+
+${isRole
+  ? `Role: ${subjectName}
+Focus topics: ${topicContext[subjectId] || subjectName}
+Companies hiring for this role: ${companies}`
+  : `Subject: ${subjectName}
+Companies that ask this subject: ${companies}`
+}
+
 Question number: ${qNumber} of ${totalQuestions}
 
 Previous conversation:
 ${historyText}
 
 Generate ONE interview question following these strict rules:
-- Difficulty: EASY to MEDIUM only (not advanced or research level)
-- Type: Conceptual or definitional questions (not complex implementation)
-- Style: Like "What is...", "Explain...", "What is the difference between...", "Give an example of..."
-- Target: A student who has studied ${subjectName} in their B.Tech syllabus
-- Length: One clear, simple sentence
+- Difficulty: EASY to MEDIUM only
+- Type: Conceptual questions like "What is...", "Explain...", "What is the difference between..."
+- Target: Final year B.Tech CS student appearing for campus placements
+- Length: One clear simple sentence
 - No numbering, no preamble — just the question directly
+${isRole ? `- Ask questions specifically relevant to ${subjectName} role` : `- Ask questions specifically from ${subjectName} subject`}
 
-Examples of GOOD questions:
-- What is the difference between a stack and a queue?
-- Explain what deadlock is with an example.
-- What is normalization in DBMS?
-- What is the difference between TCP and UDP?
-
-Examples of BAD questions (too hard — avoid these):
-- Design a distributed system that handles...
-- Implement a lock-free concurrent data structure...
-- How would you optimize a B+ tree for...`
+Examples of GOOD questions for ${subjectName}:
+${isRole && subjectId === 'frontend'
+  ? '- What is the difference between let, var and const?\n- What is the Virtual DOM in React?\n- What is event delegation in JavaScript?'
+  : isRole && subjectId === 'backend'
+  ? '- What is a REST API and what are HTTP methods?\n- What is the difference between SQL and NoSQL?\n- What is middleware in Node.js?'
+  : isRole && subjectId === 'sde'
+  ? '- What is the time complexity of binary search?\n- What is the difference between stack and queue?\n- Explain OOP principles.'
+  : '- What is the difference between process and thread?\n- Explain deadlock with an example.\n- What is virtual memory?'
+}`
 
       const response = await groq.chat.completions.create({
         model: 'llama-3.3-70b-versatile',

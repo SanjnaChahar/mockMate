@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function LoginPage() {
+   
+  const navigate = useNavigate()
+  
   return (
     <div className="bg-gray-900 min-h-screen flex items-center justify-center">
       <div className="bg-gray-800 p-8 rounded-xl w-full max-w-md border border-gray-700">
@@ -46,7 +49,9 @@ function LoginPage() {
           </div>
 
           {/* Login Button */}
-          <button className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition mt-2">
+          <button
+            onClick={() => Navigate('/dashboard')}
+            className="bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition mt-2">
             Login
           </button>
 
