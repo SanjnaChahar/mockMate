@@ -227,13 +227,22 @@ STRICT RULES:
     await evaluateAnswer(answer, updatedMessages)
 
     if (questionCount >= totalQuestions) {
-      const avg = Math.round(totalScore / Math.max(scoreCount, 1))
-      setTimeout(() => {
-        addMessage('ai', `🎉 Interview complete! You answered all ${totalQuestions} questions. Great effort! Redirecting to your results...`)
-        setSessionEnded(true)
-        setTimeout(() => navigate('/results'), 3000)
-      }, 1000)
-    } else {
+  const avg = Math.round(totalScore / Math.max(scoreCount, 1))
+  setTimeout(() => {
+    addMessage('ai', `🎉 Interview complete! You answered all ${totalQuestions} questions. Your average score is ${avg}/10. Redirecting to results...`)
+    setSessionEnded(true)
+    setTimeout(() => {
+      navigate('/results', {
+        state: {
+          score: avg * 10,
+          subject: subjectName,
+          totalQuestions: totalQuestions
+        }
+      })
+    }, 3000)
+  }, 1000)
+}
+    else {
       setTimeout(async () => {
         await generateQuestion(
           [...updatedMessages],

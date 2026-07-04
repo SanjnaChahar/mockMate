@@ -5,6 +5,7 @@ import SignupPage from './pages/SignupPage'
 import DashboardPage from './pages/DashboardPage'
 import SubjectSelectPage from './pages/SubjectSelectPage'
 import InterviewPage from './pages/InterviewPage'
+import ResultsPage from './pages/ResultsPage'
 import Navbar from './components/Navbar'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/subject-select" element={<SubjectSelectPage />} />
         <Route path="/interview/topic/:subjectId" element={<InterviewPage />} />
+        <Route path="/results" element={<ResultsPage />} />
       </Routes>
     </div>
   )
