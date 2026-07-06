@@ -32,8 +32,14 @@ const signup = async (req, res) => {
       })
     }
   } catch (error) {
-    res.status(500).json({ message: error.message })
-  }
+  console.error("SIGNUP ERROR:");
+  console.error(error);
+  console.error(error.stack);
+
+  res.status(500).json({
+    message: error.message,
+  });
+}
 }
 
 // @desc    Login user
