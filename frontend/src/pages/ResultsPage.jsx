@@ -1,15 +1,19 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 function ResultsPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useAuth()
 
-  // Get data passed from interview page
   const score = location.state?.score || 70
   const subject = location.state?.subject || 'General'
   const totalQuestions = location.state?.totalQuestions || 5
+  const mode = location.state?.mode || 'topic'
 
-  // Calculate performance label
+  const [saved, setSaved] = useState(false)
+
   function getPerformance(score) {
     if (score >= 80) return { label: 'Excellent! 🌟', color: 'text-green-400' }
     if (score >= 60) return { label: 'Good Job! 👍', color: 'text-blue-400' }
@@ -18,6 +22,38 @@ function ResultsPage() {
   }
 
   const performance = getPerformance(score)
+
+  // Save session to database
+  useEffect(() => {
+    async function saveSession() {
+      if (!user || saved) return
+
+      try {
+        const response = await fetch('http://localhost:5000/api/sessions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.token}`,
+          },
+          body: JSON.stringify({
+            mode,
+            subject,
+            totalQuestions,
+            averageScore: score,
+          }),
+        })
+
+        if (response.ok) {
+          setSaved(true)
+          console.log('Session saved!')
+        }
+      } catch (error) {
+        console.error('Error saving session:', error)
+      }
+    }
+
+    saveSession()
+  }, [])
 
   return (
     <div className="bg-gray-900 min-h-screen text-white flex items-center justify-center px-6 py-10">
@@ -30,12 +66,15 @@ function ResultsPage() {
           <p className="text-gray-400">
             Here's how you performed in your {subject} interview
           </p>
+          {saved && (
+            <p className="text-green-400 text-sm mt-2">
+              ✅ Session saved to your profile!
+            </p>
+          )}
         </div>
 
-        {/* Score Card */}
+        {/* Score Circle */}
         <div className="bg-gray-800 rounded-2xl p-8 border border-gray-700 mb-6 text-center">
-
-          {/* Score Circle */}
           <div className="relative w-36 h-36 mx-auto mb-6">
             <svg className="w-36 h-36 transform -rotate-90" viewBox="0 0 36 36">
               <path
@@ -58,17 +97,15 @@ function ResultsPage() {
             </div>
           </div>
 
-          {/* Performance Label */}
           <p className={`text-2xl font-bold mb-2 ${performance.color}`}>
             {performance.label}
           </p>
           <p className="text-gray-400 text-sm">
             You answered {totalQuestions} questions
           </p>
-
         </div>
 
-        {/* Stats Row */}
+        {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-6">
           <div className="bg-gray-800 rounded-xl p-4 text-center border border-gray-700">
             <p className="text-2xl font-bold text-purple-400">{totalQuestions}</p>
@@ -86,31 +123,28 @@ function ResultsPage() {
           </div>
         </div>
 
-        {/* Tips based on score */}
+        {/* Tips */}
         <div className="bg-gray-800 rounded-xl p-6 border border-gray-700 mb-6">
           <h3 className="font-bold mb-3 text-purple-400">💡 Next Steps</h3>
           {score >= 80 ? (
             <p className="text-gray-300 text-sm leading-relaxed">
               Excellent performance! You have a strong grasp of {subject}.
-              Try increasing the difficulty or explore other subjects to
-              broaden your preparation.
+              Try other subjects to broaden your preparation.
             </p>
           ) : score >= 60 ? (
             <p className="text-gray-300 text-sm leading-relaxed">
-              Good job! You understand the basics of {subject} well.
-              Focus on the questions you struggled with and practice
-              explaining concepts with examples.
+              Good job! Focus on the questions you struggled with and
+              practice explaining concepts with real examples.
             </p>
           ) : (
             <p className="text-gray-300 text-sm leading-relaxed">
-              Keep practicing! Review the core concepts of {subject}
-              from your notes or textbook, then come back and try again.
-              Consistency is key for placement preparation.
+              Keep practicing! Review core concepts of {subject} from
+              your notes, then come back and try again.
             </p>
           )}
         </div>
 
-        {/* Action Buttons */}
+        {/* Buttons */}
         <div className="flex flex-col gap-3">
           <button
             onClick={() => navigate('/subject-select')}
